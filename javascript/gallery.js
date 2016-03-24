@@ -10,23 +10,32 @@ setupViewToggle(items);
 setupSearch(items);
 
 function setupSearch(items) {
-  s.gallerySearchButton.on('click', function() {
-    var new_items = [];
-    $.each(items, function(index, value) {
-      var regex = new RegExp(s.gallerySearchField.val(), 'gi');
-      if (value["title"].match(regex)) {
-        new_items.push(value);
-      }
-    });
-
-    s.galleryContent.empty();
-    if (s.galleryViewToggle.hasClass('gallery-grid_view')) {
-      showGridView(new_items);
-    } else {
-      showListView(new_items);
+  s.gallerySearchButton.on('keypress', function(event) {
+    if (event.keyCode == '13') {
+      showSearchResult(items);
     }
-    setupViewToggle(new_items);
   });
+  s.gallerySearchButton.on('click', function() {
+    showSearchResult(items);
+  });
+}
+
+function showSearchResult(items) {
+  var new_items = [];
+  $.each(items, function(index, value) {
+    var regex = new RegExp(s.gallerySearchField.val(), 'gi');
+    if (value["title"].match(regex)) {
+      new_items.push(value);
+    }
+  });
+
+  s.galleryContent.empty();
+  if (s.galleryViewToggle.hasClass('gallery-grid_view')) {
+    showGridView(new_items);
+  } else {
+    showListView(new_items);
+  }
+  setupViewToggle(new_items);
 }
 
 function setupViewToggle(items) {
